@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Панель продавца - AltConcept{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+    <h2>💼 Мои товары</h2>
+    <a href="#add-form" class="btn">+ Добавить товар</a>
+</div>
+
+<!-- Форма добавления -->
+<form id="add-form" class="form-box mt-2" action="/seller/product/add" method="POST" enctype="multipart/form-data">
+    <h3>Новый товар</h3>
+    <input type="text" name="name" placeholder="Название игры" required>
+    <textarea name="description" placeholder="Описание" rows="3"></textarea>
+    <input type="number" name="price" placeholder="Цена (₽)" step="0.01" min="0" required>
+    <input type="file" name="image" accept="image/*">
+    <button type="submit" class="btn">Добавить</button>
+</form>
+
+<!-- Список товаров -->
+{% if products %}
+<table class="mt-2">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }} ₽</td>
+            <td>
+                <a href="/seller/product/edit/{{ product.id }}" class="btn secondary">✏️</a>
+                <button class="btn danger btn-delete-product" data-id="{{ product.id }}">🗑️</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="mt-2">У вас пока нет товаров. Добавьте первый!</p>
+{% endif %}
+{% endblock %}
+

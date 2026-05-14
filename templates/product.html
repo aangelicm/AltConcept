@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - AltConcept{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start">
+    <div>
+        <img src="{{ product.image or '/static/img/placeholder.png' }}" 
+             alt="{{ product.name }}" 
+             style="width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+    </div>
+    <div>
+        <h2>{{ product.name }}</h2>
+        <p class="price" style="font-size:1.5rem;color:#e94560;font-weight:bold;margin:1rem 0">
+            {{ product.price }} ₽
+        </p>
+        <p>{{ product.description or 'Описание отсутствует' }}</p>
+        <p class="mt-1"><strong>Продавец:</strong> #{{ product.seller_id }}</p>
+        
+        {% if request.state.user and request.state.user.role == 'покупатель' %}
+        <button class="btn btn-add-to-cart mt-2" data-id="{{ product.id }}">🛒 Добавить в корзину</button>
+        {% elif not request.state.user %}
+        <a href="/auth/login" class="btn mt-2">Войдите, чтобы купить</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
